@@ -1,2 +1,5 @@
 __pycache__
 kitti_256/
+.DS_Store
+*-MacBook-Pro.local
+*.csv
