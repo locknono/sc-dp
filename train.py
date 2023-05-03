@@ -32,7 +32,7 @@ parser.add_argument('--padding-mode', type=str, choices=['zeros', 'border'], def
                     ' border will only null gradients of the coordinate outside (x or y)')
 parser.add_argument('-j', '--workers', default=4, type=int,
                     metavar='N', help='number of data loading workers')
-parser.add_argument('--epochs', default=3, type=int,
+parser.add_argument('--epochs', default=2, type=int,
                     metavar='N', help='number of total epochs to run')
 parser.add_argument('--epoch-size', default=1000, type=int, metavar='N',
                     help='manual epoch size (will match dataset size if not set)')
