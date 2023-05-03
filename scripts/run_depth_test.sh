@@ -1,8 +1,9 @@
-DATA_ROOT=/media/bjw/Disk/Dataset/kitti_raw/
+DATA_ROOT=raw_data_downloader/
 TEST_FILE=kitti_eval/test_files_eigen.txt
 RESULTS_DIR=results/depth/
 
-DISP_NET=~/Research/SC-Models/cs+k_depth.tar
+# DISP_NET=~/Research/SC-Models/cs+k_depth.tar
+DISP_NET=./checkpoints/dispnet.checkpoint.pth.tar
 
 #  predict depth and save results to "results_dir/predictions.npy"
  python3 test_disp.py --dispnet DispResNet --img-height 256 --img-width 832 \
