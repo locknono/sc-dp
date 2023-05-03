@@ -213,6 +213,7 @@ def main():
         logger.valid_writer.write(' * Avg {}'.format(error_string))
 
     for epoch in range(args.epochs):
+        print(f"==>> epoch: {epoch} / {args.epochs}")
         logger.epoch_bar.update(epoch)
 
         # train for one epoch
@@ -319,7 +320,7 @@ def train(args, train_loader, disp_net, pose_net, optimizer, epoch_size, logger,
         logger.train_bar.update(i+1)
         if i % args.print_freq == 0:
             logger.train_writer.write(
-                'Train: Epoch {} Time {}s Data {} Loss {}'.format(i, batch_time, data_time, losses))
+                'Train: Batch {} Time {}s Data {} Loss {}'.format(i, batch_time, data_time, losses))
         if i >= epoch_size - 1:
             break
 
