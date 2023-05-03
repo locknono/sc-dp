@@ -54,13 +54,23 @@ def tensor2array(tensor, max_value=None, colormap='rainbow'):
     return array
 
 
+def mkdir_if_not_exists(path):
+    """Make a directory if it does not exist.
+    Args:
+        path: directory to create
+    """
+    if not os.path.exists(path):
+        os.makedirs(path)
+
 def save_checkpoint(save_path, dispnet_state, exp_pose_state, is_best, filename='checkpoint.pth.tar'):
+    mkdir_if_not_exists(os.path.join('checkpoints/dispnet'))
+    mkdir_if_not_exists(os.path.join('checkpoints/exp_pose'))
     file_prefixes = ['dispnet', 'exp_pose']
     states = [dispnet_state, exp_pose_state]
     for (prefix, state) in zip(file_prefixes, states):
         print('save model to:', save_path/'{}_{}'.format(prefix, filename))
         torch.save(state, save_path/'{}_{}'.format(prefix, filename))
-        torch.save(state, os.path.join('checkpoints/resnet_256', prefix, filename))
+        torch.save(state, os.path.join('checkpoints', prefix, filename))
 
     if is_best:
         for prefix in file_prefixes:
