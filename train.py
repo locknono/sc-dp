@@ -80,8 +80,9 @@ parser.add_argument('--name', dest='name', type=str, required=True,
 best_error = -1
 n_iter = 0
 device = torch.device(
-    "cuda") if torch.cuda.is_available() else torch.device("cpu")
+"cuda") if torch.cuda.is_available() else torch.device("cpu")
 
+print('using device:', device)
 
 def main():
     global best_error, n_iter, device
@@ -147,6 +148,8 @@ def main():
 
     if args.epoch_size == 0:
         args.epoch_size = len(train_loader)
+    
+    print(f"train_loader size: {len(train_loader)}")
 
     # create model
     print("=> creating model")
