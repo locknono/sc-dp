@@ -11,3 +11,5 @@ evo
 scikit-image
 pebble
 tqdm
+torchvision
+opencv-python
