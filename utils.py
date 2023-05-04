@@ -61,13 +61,12 @@ def save_checkpoint(save_path, dispnet_state, exp_pose_state, is_best, filename=
     # Set the directory for saving the model in Google Drive
     model_saving_directory = "/content/gdrive/MyDrive/"
 
-    model_saving_path = os.path.join(model_saving_directory, save_path, prefix, filename)
-    print(f"==>> model_saving_path: {model_saving_path}")
-
-    best_model_path = os.path.join(model_saving_directory, save_path, '{}_model_best.pth.tar'.format(prefix))
-    print(f"==>> best_model_path: {best_model_path}")
-
     for (prefix, state) in zip(file_prefixes, states):
+        model_saving_path = os.path.join(model_saving_directory, save_path, prefix, filename)
+        print(f"==>> model_saving_path: {model_saving_path}")
+
+        best_model_path = os.path.join(model_saving_directory, save_path, '{}_model_best.pth.tar'.format(prefix))
+        print(f"==>> best_model_path: {best_model_path}")
         torch.save(state, model_saving_path)
 
     if is_best:
