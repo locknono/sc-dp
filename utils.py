@@ -68,7 +68,7 @@ def save_checkpoint(save_path, dispnet_state, exp_pose_state, is_best, filename=
     file_prefixes = ['dispnet', 'exp_pose']
     states = [dispnet_state, exp_pose_state]
     for (prefix, state) in zip(file_prefixes, states):
-        print('save model to:', save_path/'{}_{}'.format(prefix, filename))
+        print('saving model to:', save_path/'{}_{}'.format(prefix, filename))
         torch.save(state, save_path/'{}_{}'.format(prefix, filename))
         torch.save(state, os.path.join('checkpoints', prefix, filename))
 
