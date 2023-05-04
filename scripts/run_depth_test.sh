@@ -12,4 +12,5 @@ python eval_depth.py \
 --dataset kitti \
 --pred_depth=$RESULTS_DIR/predictions.npy \
 --gt_depth=$DATA_ROOT/depth \
---vis_dir=$RESULTS_DIR
+--vis_dir=$RESULTS_DIR \
+--img_dir=$DATA_ROOT/color
