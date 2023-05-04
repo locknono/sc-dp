@@ -7,7 +7,7 @@ import datetime
 from collections import OrderedDict
 from matplotlib import cm
 from matplotlib.colors import ListedColormap, LinearSegmentedColormap
-
+import os
 
 def high_res_colormap(low_res_cmap, resolution=1000, max_value=1):
     # Construct the list colormap, with interpolated values for higer resolution
@@ -61,10 +61,15 @@ def save_checkpoint(save_path, dispnet_state, exp_pose_state, is_best, filename=
     # Set the directory for saving the model in Google Drive
     model_saving_directory = "/content/gdrive/MyDrive/"
 
+    model_saving_path = os.path.join(model_saving_directory, save_path, prefix, filename)
+    print(f"==>> model_saving_path: {model_saving_path}")
+
+    best_model_path = os.path.join(model_saving_directory, save_path, '{}_model_best.pth.tar'.format(prefix))
+    print(f"==>> best_model_path: {best_model_path}")
+
     for (prefix, state) in zip(file_prefixes, states):
-        torch.save(state, {}/save_path/'{}_{}'.format(model_saving_directory, prefix, filename))
+        torch.save(state, model_saving_path)
 
     if is_best:
         for prefix in file_prefixes:
-            shutil.copyfile({}/save_path/'{}_{}'.format(model_saving_directory, prefix, filename),
-                            {}/save_path/'{}_model_best.pth.tar'.format(model_saving_directory, prefix))
+            shutil.copyfile(model_saving_path, best_model_path)

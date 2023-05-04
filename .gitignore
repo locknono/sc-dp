@@ -3,3 +3,4 @@ kitti_256/
 .DS_Store
 *-MacBook-Pro.local
 *.csv
+kitti_depth_test
