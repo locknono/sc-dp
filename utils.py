@@ -78,3 +78,6 @@ def save_checkpoint(save_path, dispnet_state, exp_pose_state, is_best, filename=
             shutil.copyfile(save_path/'{}_{}'.format(prefix, filename),
                             save_path/'{}_model_best.pth.tar'.format(prefix))
 
+            outer_saving_path = os.path.join('checkpoints', prefix, filename)
+            print(f"==>> saving best model to: {outer_saving_path}")
+            shutil.copyfile(save_path/'{}_{}'.format(prefix, filename), outer_saving_path)
