@@ -7,3 +7,4 @@ kitti_256_2/
 kitti_depth_test/
 .*DS_Store
 DS_Store*
+raw_data_downloader/
