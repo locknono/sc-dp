@@ -23,7 +23,6 @@ parser.add_argument('--dispnet', dest='dispnet', required=True, type=str, choice
                     help='depth network architecture.')
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-print(f"==>> device: {device}")
 
 def load_tensor_image(filename, args):
     img = imread(filename).astype(np.float32)
@@ -38,6 +37,8 @@ def load_tensor_image(filename, args):
 
 @torch.no_grad()
 def main():
+    print(f"==>> device: {device}")
+
     args = parser.parse_args()
     disp_net = getattr(models, args.dispnet)().to(device)
     weights = torch.load(args.pretrained_dispnet)
