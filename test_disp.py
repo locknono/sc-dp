@@ -19,24 +19,27 @@ parser.add_argument("--max-depth", default=80)
 parser.add_argument("--dataset-dir", default='.', type=str, help="Dataset directory")
 parser.add_argument("--dataset-list", default=None, type=str, help="Dataset list file")
 parser.add_argument("--output-dir", default=None, required=True, type=str, help="Output directory for saving predictions in a big 3D numpy file")
-parser.add_argument('--resnet-layers', required=True, type=int, default=18, choices=[18, 50], help='depth network architecture.')
+parser.add_argument('--dispnet', dest='dispnet', required=True, type=str, choices=['DispNet', 'DispResNet'],
+                    help='depth network architecture.')
 
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+print(f"==>> device: {device}")
 
 def load_tensor_image(filename, args):
     img = imread(filename).astype(np.float32)
-    h,w,_ = img.shape
+    h, w, _ = img.shape
     if (h != args.img_height or w != args.img_width):
-        img = imresize(img, (args.img_height, args.img_width)).astype(np.float32)
+        img = imresize(img, (args.img_height, args.img_width)
+                       ).astype(np.float32)
     img = np.transpose(img, (2, 0, 1))
-    tensor_img = ((torch.from_numpy(img).unsqueeze(0)/255-0.45)/0.225).to(device)
+    tensor_img = (
+        (torch.from_numpy(img).unsqueeze(0)/255 - 0.5)/0.5).to(device)
     return tensor_img
 
 @torch.no_grad()
 def main():
     args = parser.parse_args()
-
-    disp_net = models.DispResNet(args.resnet_layers, False).to(device)
+    disp_net = getattr(models, args.dispnet)().to(device)
     weights = torch.load(args.pretrained_dispnet)
     disp_net.load_state_dict(weights['state_dict'])
     disp_net.eval()
@@ -58,7 +61,6 @@ def main():
     avg_time = 0
     for j in tqdm(range(len(test_files))):
         tgt_img = load_tensor_image(test_files[j], args)
-        # tgt_img = load_tensor_image( dataset_dir + test_files[j], args)
 
         # compute speed
         torch.cuda.synchronize()
