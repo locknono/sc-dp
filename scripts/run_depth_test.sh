@@ -1,4 +1,4 @@
-DISP_NET=checkpoints/dispnet/checkpoint.pth.tar
+DISP_NET=checkpoints/k_depth.tar
 DATA_ROOT=Dataset/kitti_depth_test
 RESULTS_DIR=results/test
 
