@@ -6,7 +6,8 @@ RESULTS_DIR=results/test
 python test_disp.py --img-height 256 --img-width 832 \
 --pretrained-dispnet $DISP_NET --dataset-dir $DATA_ROOT/color \
 --dispnet DispResNet \
---output-dir $RESULTS_DIR
+--output-dir $RESULTS_DIR \
+--pretrained-pose k_post.tar
 
 # evaluate
 python eval_depth.py \
