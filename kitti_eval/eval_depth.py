@@ -50,10 +50,7 @@ def compute_depth_errors(gt, pred):
     abs_rel = np.mean(np.abs(gt - pred) / gt)
     sq_rel = np.mean(((gt - pred) ** 2) / gt)
 
-    if args.dataset == 'nyu':
-        return abs_rel, log10, rmse, a1, a2, a3
-    elif args.dataset == 'kitti':
-        return abs_rel, sq_rel, rmse, rmse_log, a1, a2, a3
+    return abs_rel, sq_rel, rmse, rmse_log, a1, a2, a3
 
 
 def depth_visualizer(data):
@@ -97,11 +94,7 @@ class DepthEvalEigen():
     def __init__(self):
 
         self.min_depth = 1e-3
-
-        if args.dataset == 'nyu':
-            self.max_depth = 10.
-        elif args.dataset == 'kitti':
-            self.max_depth = 80.
+        self.max_depth = 80.
 
     def main(self):
         pred_depths = []
@@ -111,12 +104,9 @@ class DepthEvalEigen():
         pred_depths = np.load(os.path.join(args.pred_depth))
 
         """ Evaluation """
-        if args.dataset == 'nyu':
-            gt_depths = np.load(args.gt_depth)
-        elif args.dataset == 'kitti':
-            gt_depths = []
-            for gt_f in sorted(Path(args.gt_depth).files("*.npy")):
-                gt_depths.append(np.load(gt_f))
+        gt_depths = []
+        for gt_f in sorted(Path(args.gt_depth).files("*.npy")):
+            gt_depths.append(np.load(gt_f))
 
         pred_depths = self.evaluate_depth(gt_depths, pred_depths, eval_mono=True)
 
@@ -136,20 +126,11 @@ class DepthEvalEigen():
                 h, w, _ = img.shape
 
                 cat_img = 0
-                if args.dataset == 'nyu':
-                    cat_img = np.zeros((h, 3*w, 3))
-                    cat_img[:, :w] = img
-                    pred = pred_depths[i]
-                    gt = gt_depths[i]
-                    vis_pred, vis_gt = depth_pair_visualizer(pred, gt)
-                    cat_img[:, w:2*w] = vis_pred
-                    cat_img[:, 2*w:3*w] = vis_gt
-                elif args.dataset == 'kitti':
-                    cat_img = np.zeros((2*h, w, 3))
-                    cat_img[:h] = img
-                    pred = pred_depths[i]
-                    vis_pred = depth_visualizer(pred)
-                    cat_img[h:2*h, :] = vis_pred
+                cat_img = np.zeros((2*h, w, 3))
+                cat_img[:h] = img
+                pred = pred_depths[i]
+                vis_pred = depth_visualizer(pred)
+                cat_img[h:2*h, :] = vis_pred
 
                 # save image
                 cat_img = cat_img.astype(np.uint8)
@@ -217,12 +198,8 @@ class DepthEvalEigen():
 
         mean_errors = np.array(errors).mean(0)
 
-        if args.dataset == 'nyu':
-            print("\n  " + ("{:>8} | " * 6).format("abs_rel", "log10", "rmse", "a1", "a2", "a3"))
-            print(("&{: 8.3f}  " * 6).format(*mean_errors.tolist()) + "\\\\")
-        elif args.dataset == 'kitti':
-            print("\n  " + ("{:>8} | " * 7).format("abs_rel", "sq_rel", "rmse", "rmse_log", "a1", "a2", "a3"))
-            print(("&{: 8.3f}  " * 7).format(*mean_errors.tolist()) + "\\\\")
+        print("\n  " + ("{:>8} | " * 7).format("abs_rel", "sq_rel", "rmse", "rmse_log", "a1", "a2", "a3"))
+        print(("&{: 8.3f}  " * 7).format(*mean_errors.tolist()) + "\\\\")
 
         return resized_pred_depths
 
